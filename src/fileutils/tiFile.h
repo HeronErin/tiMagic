@@ -1,33 +1,47 @@
 #pragma once
-#include "tiFile.c"
 #include <stdint.h>
 #include <stdlib.h>
 
 enum FieldType {
-    UCHAR_FIELD,
-    USHORT_FIELD,
-    USHORT_CHECKSUM_FIELD,
+    UCHAR_FIELD,            // 0
+    USHORT_FIELD,           // 1
+    USHORT_CHECKSUM_FIELD,  // 2
 
-    UINT_FIELD,
+    UINT_FIELD,             // 3
 
-    FIXED_STRING_FIELD,
-    FLOATING_STRING_FIELD,
+    FIXED_STRING_FIELD,     // 4
+    FLOATING_STRING_FIELD,  // 5
 
-    FIXED_BYTES_FIELD,
-    FLOATING_BYTES_FIELD,
+    FIXED_BYTES_FIELD,      // 6
+    FLOATING_BYTES_FIELD,   // 7
 
-    GREEDY_BYTES_FIELD,
-    REQUIRED_BYTES_FIELD,
+    GREEDY_BYTES_FIELD,     // 8
+    REQUIRED_BYTES_FIELD,   // 9
 };
 
 
 typedef struct {
     enum FieldType type;
     const char* id;
-    const char* deps;
+    const char* dependsOn;
     const char* byte_input;
-    size_t len;
-    const char* data;
+    size_t length;
+    uint8_t* data;
 } Field;
 
 
+typedef struct {
+    const size_t size;
+    const Field* fields;
+} LinkFileTemplate;
+
+
+typedef struct {
+    size_t size;
+    Field* fields;
+} LinkFileResult;
+
+
+LinkFileResult parseFile(const LinkFileTemplate template, size_t size, uint8_t* data);
+
+#include "tiFile.c"
