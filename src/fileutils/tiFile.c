@@ -74,6 +74,11 @@ LinkFileResult parseFile(const LinkFileTemplate template, size_t size, uint8_t* 
                 output.data = data + index;
                 index += output.length;
                 break;
+            case GREEDY_BYTES_FIELD:
+                output.length = size-index;
+                output.data = data + index;
+                index = size;
+                break;
             case FIXED_STRING_FIELD:
             case FIXED_BYTES_FIELD:
                 assert(index + check.length < size);

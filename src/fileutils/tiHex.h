@@ -37,6 +37,8 @@ typedef struct {
     uint8_t sum;
 } HexLine;
 
-
+void freeHexFile(HexFile f);
+HexLine* _makeLines(uint8_t* data, size_t size);
+HexFile parseTiHex(uint8_t* data, size_t size);
 
 #include "tiHex.c"

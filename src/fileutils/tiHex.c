@@ -7,6 +7,7 @@
 #include "../hexUtils.c"
 
 #include "stdio.h"
+#include <endian.h>
 
 void freeHexFile(HexFile f){
     for (size_t i = 0; i < f.size; i++){
@@ -86,9 +87,13 @@ HexFile parseTiHex(uint8_t* data, size_t size){
     size_t lineIndex = 0; 
     bool isFirstDataline = true;
 
-    current.address = 0;
-    current.size = 0;
-    current.data = NULL;
+    #define currentInit() \
+        current.declaredPage = 0xFFFF; \
+        current.address = 0; \
+        current.size = 0; \
+        current.data = NULL
+
+    currentInit();
 
     while (lines[lineIndex].recordType != 0xFF){
         if (chunksAmount <= chunkIndex){
@@ -100,18 +105,18 @@ HexFile parseTiHex(uint8_t* data, size_t size){
             case ExtendedSegmentAddress:
                 if (!isFirstDataline) {
                     ret.chunks[chunkIndex++] = current;
-                    current.address = 0;
-                    current.size = 0;
-                    current.data = NULL;
+                    currentInit();
                     isFirstDataline = true;
                 }
-                current.declaredPage = *(ushort*)lines[lineIndex].data;
+                current.declaredPage = be16toh(*(ushort*)lines[lineIndex].data);
                 break;
             case Data:
                if (isFirstDataline) {
                     current.address = lines[lineIndex].address;
                     isFirstDataline = false;
                 }
+                assert_eq(current.size + current.address, lines[lineIndex].address);
+
                 // Not the best approach, but it works.
                 size_t oldSize = current.size;
                 current.data = realloc(current.data, current.size+=lines[lineIndex].count);
@@ -121,9 +126,7 @@ HexFile parseTiHex(uint8_t* data, size_t size){
             case EndOfFile:
                 if (!isFirstDataline){
                     ret.chunks[chunkIndex++] = current;
-                    current.address = 0;
-                    current.size = 0;
-                    current.data = NULL;
+                    currentInit();
                     isFirstDataline = true;
                 }
                 break;

@@ -65,7 +65,7 @@ const Field FLASH_FILE_FIELDS[] = {
 
     {UINT_FIELD, "HexData length"},
 
-    {FLOATING_BYTES_FIELD, "HexData", "HexData length"}
+    {GREEDY_BYTES_FIELD, "HexData"}
 };
 
 const LinkFileTemplate FLASH_FILE = {

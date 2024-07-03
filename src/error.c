@@ -1,6 +1,7 @@
 #pragma once
 #include <stdarg.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 void __attribute__((noreturn)) __throw_error(const char *file, int line, const char *format, ...)  {
     va_list args;

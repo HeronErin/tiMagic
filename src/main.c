@@ -9,7 +9,7 @@
 #include "hexUtils.c"
 
 int main(){
-    FILE* fp = fopen("bins/8xkFiles/helloWorld.8xk", "r");
+    FILE* fp = fopen("bins/ti84plus_2.55.8xu", "r");
     fseek(fp, 0L, SEEK_END);
     size_t size = ftell(fp);
     fseek(fp, 0L, SEEK_SET);
@@ -22,8 +22,13 @@ int main(){
     LinkFileResult f = parseFile(FLASH_FILE, size, data);
     Field* fi = findFieldById(f, "HexData");
 
-    // printf("We got %s\n", fi->data);
     HexFile file = parseTiHex(fi->data, fi->length);
+    printf("%lu:\n", file.size);
+    printf("- %lu\n", file.chunks[0].declaredPage);
+    printf("- %lu\n", file.chunks[1].declaredPage);
+    printf("- %lu\n", file.chunks[2].declaredPage);
+    printf("- %lu\n", file.chunks[3].declaredPage);
+
 
 
     freeFile(f);
