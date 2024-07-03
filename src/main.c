@@ -17,13 +17,11 @@ int main(){
     fread(data, size, 1, fp);
     fclose(fp);
 
-    uint8_t x[] = {0x59, 2, 0};
 
-    PtrLenPair pair = hexToBin("FEEDBEEF", 4);
+    LinkFileResult f = parseFile(FLASH_FILE, size, data);
+    Field* fi = findFieldById(f, "Name");
 
-
-    printf("We got %d\n", pair.length);
-    printf("%x %x %x %x\n", pair.data[0], pair.data[1], pair.data[2], pair.data[3]);
+    printf("We got %lu\n", fi->length);
 
     return 0;
 }

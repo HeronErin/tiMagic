@@ -41,7 +41,8 @@ typedef struct {
     Field* fields;
 } LinkFileResult;
 
-
+Field* findFieldById(LinkFileResult file, const char* id);
+size_t toUnsigned(Field field);
 LinkFileResult parseFile(const LinkFileTemplate template, size_t size, uint8_t* data);
 
 #include "tiFile.c"
