@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include "fileutils/tiFile.h"
 #include "fileutils/linkFormats.h"
+#include "fileutils/tiHex.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include "error.c"
@@ -19,9 +20,14 @@ int main(){
 
 
     LinkFileResult f = parseFile(FLASH_FILE, size, data);
-    Field* fi = findFieldById(f, "Name");
+    Field* fi = findFieldById(f, "HexData");
 
-    printf("We got %lu\n", fi->length);
+    // printf("We got %s\n", fi->data);
+    HexFile file = parseTiHex(fi->data, fi->length);
+
+
+    freeFile(f);
+    freeHexFile(file);
 
     return 0;
 }

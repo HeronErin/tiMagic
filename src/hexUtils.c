@@ -1,3 +1,4 @@
+#pragma once
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -29,6 +30,14 @@ typedef struct{
     size_t length;
     uint8_t* data;
 } PtrLenPair;
+
+
+uint8_t hexByteToBin(uint8_t* buf, size_t *offset){
+    uint8_t idx0 = (*(buf + *offset) & 0x1F) ^ 0x10;
+    uint8_t idx1 =  (*(buf + *offset + 1) & 0x1F) ^ 0x10;
+    (*offset)+=2;
+    return (uint8_t)(hexToBinMap[idx0] << 4) | hexToBinMap[idx1];
+}
 
 PtrLenPair hexToBin(uint8_t* ptr, size_t length){
     PtrLenPair ret;

@@ -34,6 +34,9 @@ ptrdiff_t toSigned(Field field){
     return toUnsigned(field);
 }
 
+void freeFile(LinkFileResult res){
+    free(res.fields);
+}
 
 LinkFileResult parseFile(const LinkFileTemplate template, size_t size, uint8_t* data){
     LinkFileResult result;
